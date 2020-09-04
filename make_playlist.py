@@ -1,6 +1,7 @@
 import get_responses
 
 import json
+import datetime
 
 import argparse
 import spotipy
@@ -16,6 +17,8 @@ username      = data['SPOTIFY']['USERNAME']
     
 MONTHS = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC']
 
+YEAR = datetime.datetime.now().year
+
 parser = argparse.ArgumentParser()
 parser.add_argument('-m', dest='month', help='(numerical)', type=int)
 
@@ -30,6 +33,8 @@ responses = sheet.getResults()
 song_list = []
 
 for resp in responses:
+    if resp == []:
+        continue
     if int(resp[0][0]) == args.month:
         for field in resp:
             if "https://open.spotify.com/track/" in field and field not in song_list:
@@ -44,7 +49,7 @@ token = util.prompt_for_user_token(username,
                                    redirect_uri='http://localhost/')
 
 if token:
-    pl_name = f"{MONTHS[args.month-1]}_boys_playlist"
+    pl_name = f"{MONTHS[args.month-1]}_boys_playlist_{YEAR}"
     
     sp      = spotipy.Spotify(auth=token)
     pl_list = sp.user_playlists(username)
