@@ -35,11 +35,7 @@ song_list = []
 for resp in responses:
     if resp == []:
         continue
-    month = -1
-    if resp[0][1].isdigit():
-        month = int(resp[0][0] + resp[0][1])
-    elif resp[0][0].isdigit():
-        month = int(resp[0][0])
+    month = resp[0].split('/')[0]
     if month == args.month:
         for field in resp:
             if "https://open.spotify.com/track/" in field and field not in song_list:
