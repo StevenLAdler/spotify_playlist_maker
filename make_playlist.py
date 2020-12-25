@@ -21,8 +21,12 @@ YEAR = datetime.datetime.now().year
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-m', dest='month', help='(numerical)', type=int)
+parser.add_argument('-y', dest='year', help='(numerical)', type=int)
 
 args = parser.parse_args()
+
+if(args.year is not None):
+    YEAR = args.year
 
 sheet = get_responses.DataRetriever()
 sheet.setClassVars()
@@ -36,10 +40,12 @@ for resp in responses:
     if resp == []:
         continue
     month = resp[0].split('/')[0]
-    if month.isnumeric() and int(month) == args.month:
-        for field in resp:
-            if "https://open.spotify.com/track/" in field and field not in song_list:
-                song_list+=[field]
+    year = resp[0].split('/')[2].split(' ')[0]
+    if not (month.isnumeric() and int(month) == args.month) or not (year.isnumeric() and int(year) == YEAR):
+        continue
+    for field in resp:
+        if "https://open.spotify.com/track/" in field and field not in song_list:
+            song_list+=[field]
 
 scope = 'playlist-modify-public'
 
