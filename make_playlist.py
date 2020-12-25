@@ -7,7 +7,14 @@ import argparse
 import spotipy
 import spotipy.util as util
 
-with open('config.json') as config_file:
+parser = argparse.ArgumentParser()
+parser.add_argument('-m', dest='month', help='(numerical)', type=int)
+parser.add_argument('-y', dest='year', help='(numerical)', type=int)
+parser.add_argument('-c', dest='config', help='(numerical)', type=int)
+
+args = parser.parse_args()
+
+with open(args.config) as config_file:
     data = json.load(config_file)
 config_file.close()
 
@@ -18,12 +25,6 @@ username      = data['SPOTIFY']['USERNAME']
 MONTHS = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC']
 
 YEAR = datetime.datetime.now().year
-
-parser = argparse.ArgumentParser()
-parser.add_argument('-m', dest='month', help='(numerical)', type=int)
-parser.add_argument('-y', dest='year', help='(numerical)', type=int)
-
-args = parser.parse_args()
 
 if(args.year is not None):
     YEAR = args.year

@@ -3,7 +3,7 @@
         {
             "SPREADSHEET_ID" : ,
             "SCOPES"         : ["https://www.googleapis.com/auth/spreadsheets.readonly"],
-            "RANGE_NAME"     : ,
+            "RANGE_NAME"     : "Form Responses 1!A2:E"
         },
     "SPOTIFY" :
         {
