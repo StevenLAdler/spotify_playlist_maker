@@ -10,7 +10,7 @@ import spotipy.util as util
 parser = argparse.ArgumentParser()
 parser.add_argument('-m', dest='month', help='(numerical)', type=int)
 parser.add_argument('-y', dest='year', help='(numerical)', type=int)
-parser.add_argument('-c', dest='config', help='(numerical)', type=int)
+parser.add_argument('-c', dest='config', help='(string)', type=str)
 
 args = parser.parse_args()
 
@@ -30,6 +30,7 @@ if(args.year is not None):
     YEAR = args.year
 
 sheet = get_responses.DataRetriever()
+sheet.setConfig(args.config)
 sheet.setClassVars()
 sheet.fetchCreds()
 sheet.fetchResults()

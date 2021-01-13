@@ -14,6 +14,7 @@ class DataRetriever:
         self.__SCOPES = []
         self.__SPREADSHEET_ID = ""
         self.__RANGE_NAME = ""
+        self.__CONFIG = ""
         
     def setSpreadsheetID(self, ssid):
         self.__SPREADSHEET_ID = ssid
@@ -44,9 +45,15 @@ class DataRetriever:
         
     def getCreds(self):
         return self.__CREDS
+    
+    def setConfig(self, config):
+        self.__CONFIG = config
+        
+    def getConfig(self):
+        return self.__CONFIG
             
     def setClassVars(self):
-        with open('config.json') as config_file:
+        with open(self.getConfig()) as config_file:
             data = json.load(config_file)
         config_file.close()
         self.setSpreadsheetID(data['SHEETS']['SPREADSHEET_ID'])
