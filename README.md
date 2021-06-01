@@ -11,6 +11,8 @@ column B -> names (optional)
 
 column C-?? -> spotify song links (https://open.spotify.com/track/ format)
 
+(Note: Visual example below)
+
 
 ### 1. Config File Setup
 
@@ -80,19 +82,10 @@ PL_DESC will be filled in the playlist descrtiption section on the generated pla
 ### 4. Usage
 
 ```
-python make_playlist.py -c [config] -m [month] -y [year]
+python make_playlist.py -c [config] -m [MM] -y [YYYY]
 ```
-
-config: json file created above
-
-month:  MM
-
-year:   YYYY
 
 ### Notes:
 The script determines month by timestamp
 
 If there are late responses then the date in the Google Sheet must be changed to that of the correct month.
-
-Currently the format of generated playlist names is hardcoded, going to fix this soon
-
