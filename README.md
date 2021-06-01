@@ -69,7 +69,7 @@ Create a new app
 
 Fill in the CLIENT_ID, CLIENT_SECRET, and USERNAME fields in config.json
 
-The PL_FORMAT field can be configured however you with the playlist names to be formatted
+The PL_FORMAT field can be configured however you want the playlist names to be formatted
 
 The MONTH and YEAR keywords can be placed anywhere in the string (within braces) to substitute in current values
 
