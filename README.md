@@ -3,7 +3,7 @@ pulls song links from google sheets (from a google form) and makes spotify playl
 
 ### 0. Google Sheet Setup
 
-The sheet should besetup such that: 
+The sheet should be setup such that: 
 
 column A -> timestamps
 
