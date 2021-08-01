@@ -46,7 +46,7 @@ class DataRetriever:
             with open('token.json', 'w') as token:
                 token.write(creds.to_json())
                     
-            self.setCreds(creds)
+        self.setCreds(creds)
     
     def fetchResults(self, config):
         service = build('sheets', 'v4', credentials=self.getCreds())
