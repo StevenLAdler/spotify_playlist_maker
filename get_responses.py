@@ -12,20 +12,22 @@ class DataRetriever:
     def __init__(self):
         self.__RESULTS = None
         self.__CREDS   = None
-        
-    def setResults(self, res):
-        self.__RESULTS = res
 
-    def setCreds(self, creds):
-        self.__CREDS = creds
-        
-    # @property
-    def getResults(self):
+    @property
+    def results(self):
         return self.__RESULTS
     
-    # @property
-    def getCreds(self):
-        return self.__CREDS
+    @property
+    def creds(self):
+        return self.__CREDS   
+
+    @results.setter
+    def results(self, results):
+        self.__RESULTS = results
+
+    @creds.setter
+    def creds(self, creds):
+        self.__CREDS = creds
 
     def fetchCreds(self, config):
         creds = None
@@ -46,10 +48,10 @@ class DataRetriever:
             with open('token.json', 'w') as token:
                 token.write(creds.to_json())
                     
-        self.setCreds(creds)
+        self.creds = creds
     
     def fetchResults(self, config):
-        service = build('sheets', 'v4', credentials=self.getCreds())
+        service = build('sheets', 'v4', credentials=self.creds)
 
         # Call the Sheets API
         sheet = service.spreadsheets()
@@ -57,54 +59,59 @@ class DataRetriever:
                                     range=config.range).execute()
         values = result.get('values', [])
         
-        self.setResults(values)
+        self.results = values
+        
         
 class Config:
     def __init__(self, config_path):
-        self.__CONFIG = {}
-        self.__CONFIG_PATH = config_path
-    
-    def setConfig(self):
-        with open(self.__CONFIG_PATH) as config_file:
-            self.__CONFIG = json.load(config_file)
+        self.config = config_path
+
+    @property
+    def config(self):
+        return self._config
+
+    @config.setter
+    def config(self, config_path):
+        with open(config_path) as config_file:
+            self._config = json.load(config_file)
         config_file.close()
 
     @property
     def ssid(self):
-        if self.__CONFIG:
-            return self.__CONFIG['SHEETS']['SPREADSHEET_ID']
+        if self.config:
+            return self.config['SHEETS']['SPREADSHEET_ID']
 
     @property
     def scopes(self):
-        if self.__CONFIG:
-            return self.__CONFIG['SHEETS']['SCOPES']
+        if self.config:
+            return self.config['SHEETS']['SCOPES']
 
     @property
     def range(self):
-        if self.__CONFIG:
-            return self.__CONFIG['SHEETS']['RANGE_NAME']
+        if self.config:
+            return self.config['SHEETS']['RANGE_NAME']
 
     @property
     def client_id(self):
-        if self.__CONFIG:
-            return self.__CONFIG['SPOTIFY']['CLIENT_ID']
+        if self.config:
+            return self.config['SPOTIFY']['CLIENT_ID']
 
     @property
     def client_secret(self):
-        if self.__CONFIG:
-            return self.__CONFIG['SPOTIFY']['CLIENT_SECRET']
+        if self.config:
+            return self.config['SPOTIFY']['CLIENT_SECRET']
 
     @property
     def username(self):
-        if self.__CONFIG:
-            return self.__CONFIG['SPOTIFY']['USERNAME']
+        if self.config:
+            return self.config['SPOTIFY']['USERNAME']
 
     @property
     def pl_format(self):
-        if self.__CONFIG:
-            return self.__CONFIG['SPOTIFY']['PL_FORMAT']
+        if self.config:
+            return self.config['SPOTIFY']['PL_FORMAT']
 
     @property
     def pl_desc(self):
-        if self.__CONFIG:
-            return self.__CONFIG['SPOTIFY']['PL_DESC']
+        if self.config:
+            return self.config['SPOTIFY']['PL_DESC']

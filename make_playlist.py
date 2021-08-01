@@ -17,7 +17,6 @@ parser.add_argument('-c', dest='config', help='(string)', type=str)
 args = parser.parse_args()
 
 config = Config(args.config)
-config.setConfig()
     
 MONTHS = ('JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC')
 
@@ -31,7 +30,7 @@ if(args.year is not None):
 sheet = DataRetriever()
 sheet.fetchCreds(config)
 sheet.fetchResults(config)
-responses = sheet.getResults()
+responses = sheet.results
 
 song_list = []
 
@@ -74,4 +73,3 @@ if token:
         
 else:
     print("Can't get token for", config.username)
-    
