@@ -12,69 +12,35 @@ class DataRetriever:
     def __init__(self):
         self.__RESULTS = None
         self.__CREDS   = None
-        self.__SCOPES = []
-        self.__SPREADSHEET_ID = ""
-        self.__RANGE_NAME = ""
-        self.__CONFIG = ""
-        
-    def setSpreadsheetID(self, ssid):
-        self.__SPREADSHEET_ID = ssid
-        
-    def setScopes(self, scopes):
-        self.__SCOPES = scopes
-        
-    def setRange(self, range_name):
-        self.__RANGE_NAME = range_name
-    
-    def getSpreadsheetID(self):
-        return self.__SPREADSHEET_ID
-        
-    def getScopes(self):
-        return self.__SCOPES
-        
-    def getRange(self):
-        return self.__RANGE_NAME
         
     def setResults(self, res):
         self.__RESULTS = res
-        
-    def getResults(self):
-        return self.__RESULTS
-        
+
     def setCreds(self, creds):
         self.__CREDS = creds
         
+    # @property
+    def getResults(self):
+        return self.__RESULTS
+    
+    # @property
     def getCreds(self):
         return self.__CREDS
-    
-    def setConfig(self, config):
-        self.__CONFIG = config
-        
-    def getConfig(self):
-        return self.__CONFIG
-            
-    def setClassVars(self):
-        with open(self.getConfig()) as config_file:
-            data = json.load(config_file)
-        config_file.close()
-        self.setSpreadsheetID(data['SHEETS']['SPREADSHEET_ID'])
-        self.setScopes(data['SHEETS']['SCOPES'])
-        self.setRange(data['SHEETS']['RANGE_NAME'])
-        
-    def fetchCreds(self):
+
+    def fetchCreds(self, config):
         creds = None
         # The file token.json stores the user's access and refresh tokens, and is
         # created automatically when the authorization flow completes for the first
         # time.
         if os.path.exists('token.json'):
-            creds = Credentials.from_authorized_user_file('token.json', self.getScopes())
+            creds = Credentials.from_authorized_user_file('token.json', config.scopes)
         # If there are no (valid) credentials available, let the user log in.
         if not creds or not creds.valid:
             if creds and creds.expired and creds.refresh_token:
                 creds.refresh(Request())
             else:
                 flow = InstalledAppFlow.from_client_secrets_file(
-                    'credentials.json', self.getScopes())
+                    'credentials.json', config.scopes)
                 creds = flow.run_local_server(port=0)
             # Save the credentials for the next run
             with open('token.json', 'w') as token:
@@ -82,14 +48,63 @@ class DataRetriever:
                     
             self.setCreds(creds)
     
-    def fetchResults(self):
+    def fetchResults(self, config):
         service = build('sheets', 'v4', credentials=self.getCreds())
 
         # Call the Sheets API
         sheet = service.spreadsheets()
-        result = sheet.values().get(spreadsheetId=self.getSpreadsheetID(),
-                                    range=self.getRange()).execute()
+        result = sheet.values().get(spreadsheetId=config.ssid,
+                                    range=config.range).execute()
         values = result.get('values', [])
         
         self.setResults(values)
         
+class Config:
+    def __init__(self, config_path):
+        self.__CONFIG = {}
+        self.__CONFIG_PATH = config_path
+    
+    def setConfig(self):
+        with open(self.__CONFIG_PATH) as config_file:
+            self.__CONFIG = json.load(config_file)
+        config_file.close()
+
+    @property
+    def ssid(self):
+        if self.__CONFIG:
+            return self.__CONFIG['SHEETS']['SPREADSHEET_ID']
+
+    @property
+    def scopes(self):
+        if self.__CONFIG:
+            return self.__CONFIG['SHEETS']['SCOPES']
+
+    @property
+    def range(self):
+        if self.__CONFIG:
+            return self.__CONFIG['SHEETS']['RANGE_NAME']
+
+    @property
+    def client_id(self):
+        if self.__CONFIG:
+            return self.__CONFIG['SPOTIFY']['CLIENT_ID']
+
+    @property
+    def client_secret(self):
+        if self.__CONFIG:
+            return self.__CONFIG['SPOTIFY']['CLIENT_SECRET']
+
+    @property
+    def username(self):
+        if self.__CONFIG:
+            return self.__CONFIG['SPOTIFY']['USERNAME']
+
+    @property
+    def pl_format(self):
+        if self.__CONFIG:
+            return self.__CONFIG['SPOTIFY']['PL_FORMAT']
+
+    @property
+    def pl_desc(self):
+        if self.__CONFIG:
+            return self.__CONFIG['SPOTIFY']['PL_DESC']
