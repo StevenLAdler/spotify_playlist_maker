@@ -40,9 +40,9 @@ def main():
         
     MONTHS = ('JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC')
 
-    MONTH = MONTHS[args.month-1]
+    MONTH = MONTHS[args.month-1] if args.month is not None else MONTHS[start_time.month-1]
 
-    YEAR = args.year if args.year is not None else datetime.now().year
+    YEAR = args.year if args.year is not None else start_time.year
 
     sheet = DataRetriever()
     sheet.fetchCreds(config)
