@@ -38,6 +38,6 @@ Thumbs.db
 
 # Custom #
 ##########
-.json
+*.json
 __pycache__
-.pickle
+quickstart.py
